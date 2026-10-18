@@ -403,7 +403,8 @@ static int irtty_ioctl(struct tty_struct *tty,
 		IRDA_ASSERT(dev->netdev != NULL, return -1;);
 
 		memset(&info, 0, sizeof(info)); 
-		strncpy(info.name, dev->netdev->name, sizeof(info.name)-1);
+		/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+		strscpy(info.name, dev->netdev->name, sizeof(info.name)-1);
 
 		if (copy_to_user((void __user *)arg, &info, sizeof(info)))
 			err = -EFAULT;

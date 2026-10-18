@@ -313,7 +313,8 @@ static int irda_extract_string(void *self, __u8 *buf, int len, __u8 pi,
 
 	/* Should be safe to copy string like this since we have already
 	 * checked that the buffer is long enough */
-	strncpy(str, buf+2, p.pl);
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(str, buf+2, p.pl);
 
 	pr_debug("%s(), str=0x%02x 0x%02x\n",
 		 __func__, (__u8)str[0], (__u8)str[1]);

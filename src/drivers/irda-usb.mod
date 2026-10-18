@@ -1,0 +1,1 @@
+drivers/irda-usb.o

@@ -57,7 +57,8 @@ static int irda_nl_set_mode(struct sk_buff *skb, struct genl_info *info)
 	if (!dev)
 		return -ENODEV;
 
-	irlap = (struct irlap_cb *)dev->atalk_ptr;
+	/* ndevtools commit: В ядпе 7.х больше нету AppleTalk, используем ml_priv */
+	irlap = (struct irlap_cb *)dev->ml_priv;
 	if (!irlap) {
 		dev_put(dev);
 		return -ENODEV;
@@ -88,7 +89,8 @@ static int irda_nl_get_mode(struct sk_buff *skb, struct genl_info *info)
 		return -ENOMEM;
 	}
 
-	irlap = (struct irlap_cb *)dev->atalk_ptr;
+	/* ndevtools commit: В ядпе 7.х больше нету AppleTalk, используем ml_priv */
+	irlap = (struct irlap_cb *)dev->ml_priv;
 	if (!irlap) {
 		ret = -ENODEV;
 		goto err_out;

@@ -255,7 +255,8 @@ static int ircomm_param_port_name(void *instance, irda_param_t *param, int get)
 		pr_debug("%s(), not imp!\n", __func__);
 	} else {
 		pr_debug("%s(), port-name=%s\n", __func__ , param->pv.c);
-		strncpy(self->settings.port_name, param->pv.c, 32);
+		/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+		strscpy(self->settings.port_name, param->pv.c, 32);
 	}
 
 	return 0;

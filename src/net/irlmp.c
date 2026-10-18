@@ -859,8 +859,9 @@ void irlmp_do_discovery(int nslots)
 	 *  end
 	 */
 	irlmp->discovery_cmd.data.charset = CS_ASCII;
-	strncpy(irlmp->discovery_cmd.data.info, sysctl_devname,
-		NICKNAME_MAX_LEN);
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(irlmp->discovery_cmd.data.info, sysctl_devname,
+			sizeof(irlmp->discovery_cmd.data.info));
 	irlmp->discovery_cmd.name_len = strlen(irlmp->discovery_cmd.data.info);
 	irlmp->discovery_cmd.nslots = nslots;
 
@@ -1088,8 +1089,9 @@ discovery_t *irlmp_get_discovery_response(void)
 	 */
 	irlmp->discovery_rsp.data.charset = CS_ASCII;
 
-	strncpy(irlmp->discovery_rsp.data.info, sysctl_devname,
-		NICKNAME_MAX_LEN);
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(irlmp->discovery_rsp.data.info, sysctl_devname,
+			sizeof(irlmp->discovery_rsp.data.info));
 	irlmp->discovery_rsp.name_len = strlen(irlmp->discovery_rsp.data.info);
 
 	return &irlmp->discovery_rsp;

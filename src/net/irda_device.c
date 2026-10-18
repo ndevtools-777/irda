@@ -110,7 +110,9 @@ void irda_device_set_media_busy(struct net_device *dev, int status)
 
 	pr_debug("%s(%s)\n", __func__, status ? "TRUE" : "FALSE");
 
-	self = (struct irlap_cb *)dev->atalk_ptr;
+	/* ndevtools commit: В ядпе 7.х больше нету AppleTalk, используем ml_priv */
+	self = (struct irlap_cb *)dev->ml_priv;
+
 
 	/* Some drivers may enable the receive interrupt before calling
 	 * irlap_open(), or they may disable the receive interrupt

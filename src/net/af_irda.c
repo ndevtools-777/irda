@@ -474,7 +474,9 @@ static int irda_open_tsap(struct irda_sock *self, __u8 tsap_sel, char *name)
 	notify.udata_indication	     = irda_data_indication;
 	notify.flow_indication       = irda_flow_indication;
 	notify.instance = self;
-	strncpy(notify.name, name, NOTIFY_MAX_NAME);
+
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(notify.name, name, NOTIFY_MAX_NAME);
 
 	self->tsap = irttp_open_tsap(tsap_sel, DEFAULT_INITIAL_CREDIT,
 				     &notify);
@@ -509,7 +511,8 @@ static int irda_open_lsap(struct irda_sock *self, int pid)
 	irda_notify_init(&notify);
 	notify.udata_indication	= irda_data_indication;
 	notify.instance = self;
-	strncpy(notify.name, "Ultra", NOTIFY_MAX_NAME);
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(notify.name, "Ultra", NOTIFY_MAX_NAME);
 
 	self->lsap = irlmp_open_lsap(LSAP_CONNLESS, &notify, pid);
 	if (self->lsap == NULL) {

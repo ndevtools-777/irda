@@ -463,7 +463,9 @@ static void irlap_recv_discovery_xid_rsp(struct irlap_cb *self,
 	 *  FCS bytes resides.
 	 */
 	skb->data[skb->len] = '\0';
-	strncpy(discovery->data.info, text, NICKNAME_MAX_LEN);
+
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(discovery->data.info, text, NICKNAME_MAX_LEN);
 	discovery->name_len = strlen(discovery->data.info);
 
 	info->discovery = discovery;
@@ -562,7 +564,8 @@ static void irlap_recv_discovery_xid_cmd(struct irlap_cb *self,
 		 *  FCS bytes resides.
 		 */
 		skb->data[skb->len] = '\0';
-		strncpy(discovery->data.info, text, NICKNAME_MAX_LEN);
+		/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+		strscpy(discovery->data.info, text, NICKNAME_MAX_LEN);
 		discovery->name_len = strlen(discovery->data.info);
 
 		info->discovery = discovery;
@@ -1291,7 +1294,8 @@ int irlap_driver_rcv(struct sk_buff *skb, struct net_device *dev,
 		goto out;
 
 	/* FIXME: should we get our own field? */
-	self = (struct irlap_cb *) dev->atalk_ptr;
+	/* ndevtools: p.s. i fixed it */
+	self = (struct irlap_cb *) dev->ml_priv;
 
 	/* If the net device is down, then IrLAP is gone! */
 	if (!self || self->magic != LAP_MAGIC)

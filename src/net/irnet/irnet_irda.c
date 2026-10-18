@@ -1087,7 +1087,8 @@ irnet_data_indication(void *	instance,
  err_exit:
   DERROR(IRDA_CB_ERROR, "Packet too small, dropping...\n");
   kfree_skb(skb);
-  ppp_input_error(&ap->chan, code);
+  /* ndevtools commit: В ядре 7.х параметры процедуры изменились, поэтому я убрал второй аргумент */
+  ppp_input_error(&ap->chan);
   return 0;	/* Don't return an error code, only for flow control... */
 }
 

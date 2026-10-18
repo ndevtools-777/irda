@@ -904,7 +904,8 @@ struct sir_dev * sirdev_get_instance(const struct sir_driver *drv, const char *n
 	dev->qos.min_turn_time.bits = drv->qos_mtt_bits;
 	irda_qos_bits_to_value(&dev->qos);
 
-	strncpy(dev->hwname, name, sizeof(dev->hwname)-1);
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(dev->hwname, name, sizeof(dev->hwname)-1);
 
 	atomic_set(&dev->enable_rx, 0);
 	dev->tx_skb = NULL;

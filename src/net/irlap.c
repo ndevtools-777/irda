@@ -122,13 +122,16 @@ struct irlap_cb *irlap_open(struct net_device *dev, struct qos_info *qos,
 	self->qos_dev = qos;
 	/* Copy hardware name */
 	if(hw_name != NULL) {
+		/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
 		strscpy(self->hw_name, hw_name, sizeof(self->hw_name));
 	} else {
 		self->hw_name[0] = '\0';
 	}
 
 	/* FIXME: should we get our own field? */
-	dev->atalk_ptr = self;
+	/* ndevtools: i fixed it */
+	dev->ml_priv = self;
+
 
 	self->state = LAP_OFFLINE;
 

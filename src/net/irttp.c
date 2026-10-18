@@ -430,7 +430,9 @@ struct tsap_cb *irttp_open_tsap(__u8 stsap_sel, int credit, notify_t *notify)
 	if (notify->status_indication != NULL)
 		ttp_notify.status_indication = irttp_status_indication;
 	ttp_notify.instance = self;
-	strncpy(ttp_notify.name, notify->name, NOTIFY_MAX_NAME);
+
+	/* ndevtools commit: в ядре 7.x процедура поменялась с strncpy на strscpy */
+	strscpy(ttp_notify.name, notify->name, NOTIFY_MAX_NAME);
 
 	self->magic = TTP_TSAP_MAGIC;
 	self->connected = FALSE;
